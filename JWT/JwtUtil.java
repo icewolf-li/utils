@@ -1,3 +1,10 @@
+/** 依赖
+    <dependency>
+        <groupId>com.auth0</groupId>
+        <artifactId>java-jwt</artifactId>
+        <version>4.4.0</version>
+    </dependency>
+ */
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 

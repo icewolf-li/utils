@@ -1,32 +1,91 @@
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package top.nodaoli.dto;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Result<T> {
-    private Integer code;//业务状态码  0-成功  1-失败
-    private String message;//提示信息
-    private T data;//响应数据
+import java.io.Serializable;
 
-    public Result(int code, String message, T data) {
+/**
+ * 通用 API 响应封装类
+ * @param <T> 返回数据类型
+ */
+public class Result<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    /** 状态码 */
+    private int code;
+
+    /** 提示信息 */
+    private String msg;
+
+    /** 返回数据 */
+    private T data;
+
+    // ======================== 构造方法 ========================
+
+    public Result() {}
+
+    public Result(int code, String msg) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
+    }
+
+    public Result(int code, String msg, T data) {
+        this(code, msg);
         this.data = data;
     }
 
-    //快速返回操作成功响应结果(带响应数据)
-    public static <E> Result<E> success(E data) {
-        return new Result<>(0, "操作成功", data);
+    // ======================== 快捷静态方法 ========================
+
+    public static <T> Result<T> ok() {
+        return new Result<>(200, "成功");
     }
 
-    //快速返回操作成功响应结果
-    public static Result success() {
-        return new Result(0, "操作成功", null);
+    public static <T> Result<T> ok(T data) {
+        return new Result<>(200, "成功", data);
     }
 
-    public static Result error(String message) {
-        return new Result(1, message, null);
+    public static <T> Result<T> ok(String msg, T data) {
+        return new Result<>(200, msg, data);
+    }
+
+    public static <T> Result<T> error() {
+        return new Result<>(500, "服务器内部错误");
+    }
+
+    public static <T> Result<T> error(String msg) {
+        return new Result<>(500, msg);
+    }
+
+    public static <T> Result<T> error(int code, String msg) {
+        return new Result<>(code, msg);
+    }
+
+    // ======================== 链式调用支持 ========================
+
+    public Result<T> setCode(int code) {
+        this.code = code;
+        return this;
+    }
+
+    public Result<T> setMsg(String msg) {
+        this.msg = msg;
+        return this;
+    }
+
+    public Result<T> setData(T data) {
+        this.data = data;
+        return this;
+    }
+
+    // ======================== Getter / Setter ========================
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public T getData() {
+        return data;
     }
 }
